@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class CategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +13,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return view('pages.user.index', compact('users'));
+        $products_category = Categorie
+        return view('pages.category.index', compact('products_category'));
     }
 
     /**
@@ -25,7 +24,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return  view('pages.user.create');
+        return  view('pages.category.create');
     }
 
     /**
@@ -37,17 +36,16 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => "required|string",
-            'email' => "required|email|unique:users",
-            'password' => "required|min:8|confirmed",
-        ]);
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password
+            'name'=> "required|string",
+            'description' => "required|string",
         ]);
 
-        return back()->with('success','Berhasil Menambahkan Data');
+        CategoryController::create([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
+        $products_category = ProductCategory::all();
+        return view('pages.category.index', compact('products_category'))->with('success','Berhasil Menambahkan Data');
     }
 
     /**
@@ -58,8 +56,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $users = User::find($id);
-        return  view('pages.user.detail', compact('users'));
+        //
     }
 
     /**
@@ -70,8 +67,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        $users = User::find($id);
-        return view('pages.user.edit',compact('users'));
+        //
     }
 
     /**
@@ -83,16 +79,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => "required|string",
-            'email' => "required|email|unique:users,id,".$id,
-        ]);
-        $users = User::find($id);
-        $users->update([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
-        return back()->with('success','Berhasil Mengubah Data');
+        //
     }
 
     /**
@@ -103,8 +90,6 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $users = User::find($id);
-        $users->delete();
-        return back()->with('success','Berhasil Menghapus Data');
+        //
     }
 }

@@ -1,34 +1,45 @@
 <x-admin-layout>
-    <a href="{{ route('product.create')}}" class="button">ADD PRODUCT</a>
-<table>
+    <a href="{{ route('product.create')}}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">ADD PRODUCT</a>
+    <table class="table-auto">
     <thead>
-        <th>ID</th>
-        <th>Nama</th>
-        <th>Gambar</th>
-        <th>Desckripsi</th>
-        <th>ID Category</th>
-        <th>Action</th>
+        <th class="px-4 py-2">ID</th>
+        <th class="px-4 py-2">Nama</th>
+        <th class="px-4 py-2">Gambar</th>
+        <th class="px-4 py-2">Tokopedia</th>
+        <th class="px-4 py-2">Shopee</th>
+        <th class="px-4 py-2">Lazada</th>
+        <th class="px-4 py-2">Desckripsi</th>
+        <th class="px-4 py-2">Category</th>
+        <th class="px-4 py-2">Action</th>
     </thead>
     <tbody>
         @forelse ($product as $item)
         <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $item->name }}</td>
-            <td>{{ $item->image }}</td>
-            <td>{{ $item->description }}</td>
-            <td>{{ $item->id_category }}</td>
-            <td>
-                <a href="{{ route('product.edit', $item->id_product) }}" class="">Edit</a>
-            </td>
-            <td>
-                <a href="{{ route('product.show', $item->id_product) }}" class="">Detail</a>
-            </td>
-            <td>
-                <form action="{{route('product.destroy', $item->id_product)}}" method="post">
+            <td class="border px-4 py-2">{{ $loop->iteration }}</td>
+            <td class="border px-4 py-2">{{ $item->name }}</td>
+            <td class="border px-4 py-2">
+                <div style="max-height: 100px; overflow:hidden;">
+                    <img src="{{asset('storage/' . $item->image)}}" alt="">
+                </div></td>
+            <td class="border px-4 py-2">{{ $item->url_tokped }}</td>
+            <td class="border px-4 py-2">{{ $item->url_shopee }}</td>
+            <td class="border px-4 py-2">{{ $item->url_lazada }}</td>
+            <td class="border px-4 py-2">{{ $item->description }}</td>
+            <td class="border px-4 py-2">{{ $item->category->name }}</td>
+            <td class="border px-4 py-2">
+            <div class="flex items-center justify-between">
+                <a href="{{ route('product.edit', $item->id) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Edit</a>
+            </div>
+            <div class="flex items-center justify-between">
+                <a href="{{ route('product.show', $item->id) }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Detail</a>
+            </div>
+            <div class="flex items-center justify-between">
+                <form action="{{route('product.destroy', $item->id)}}" method="post">
                     @csrf
                     @method('delete')
-                    <button onclick="return confirm('Are u Sure?')" type="submit">Delete</button>
+                    <button onclick="return confirm('Are u Sure?')" type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
                 </form>
+            </div>
             </td>
         </tr>
         @empty

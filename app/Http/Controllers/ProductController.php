@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -25,7 +26,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return  view('pages.product.create');
+        return  view('pages.product.create', [
+            'categories' => Category::all()
+        ]);
     }
 
     /**
@@ -36,21 +39,29 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        // return $request->file('image')->store('post-images');
+
         $request->validate([
             'name'=> "required|string",
-            'image'=> "required|string",
-            'description' => "required|string",
-            'id_category' => "required|string"
+            'image'=> "image|file|max:2048",
+            'url_tokped' => "string",
+            'url_shopee' => "string",
+            'url_lazada' => "string",
+            'description' => "string",
+            'category_id' => "required|string",
         ]);
 
         Product::create([
             'name' => $request->name,
-            'image' => $request->image,
+            'image' => $request->file('image')->store('post-images'),
+            'url_tokped' => $request->url_tokped,
+            'url_shopee' => $request->url_shopee,
+            'url_lazada' => $request->url_lazada,
             'description' => $request->description,
-            'id_category' => $request->id_category,
+            'category_id' => $request->category_id,
         ]);
 
-        return back()->with('success','Berhasil Menambahkan Data');
+        return redirect()->route('product.index')->with('success','Berhasil Menambahkan Data');
     }
 
     /**
@@ -74,7 +85,9 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
-        return view('pages.product.edit', compact('product'));
+        return view('pages.product.edit', compact('product'), [
+            'categories' => Category::all()
+        ]);
     }
 
     /**
@@ -88,19 +101,25 @@ class ProductController extends Controller
     {
         $request->validate([
             'name'=> "required|string",
-            'image'=> "required|string",
-            'description' => "required|string",
-            'id_category' => "required|string"
+            // 'image'=> "required|string",
+            'url_tokped' => "string",
+            'url_shopee' => "string",
+            'url_lazada' => "string",
+            'description' => "string",
+            'category_id' => "required|string"
         ]);
 
         $product = Product::find($id);
         $product->update([
             'name' => $request->name,
-            'image' => $request->image,
+            // 'image' => $request->image,
+            'url_tokped' => $request->url_tokped,
+            'url_shopee' => $request->url_shopee,
+            'url_lazada' => $request->url_lazada,
             'description' => $request->description,
-            'id_category' => $request->id_category,
+            'category_id' => $request->category_id,
         ]);
-        return back()->with('success','Berhasil Mengubah Data');
+        return redirect()->route('product.index')->with('success','Berhasil Mengubah Data');
     }
 
     /**
@@ -113,6 +132,6 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $product->delete();
-        return back()->with('success','Berhasil Menghapus Data');
+        return redirect()->route('product.index')->with('success','Berhasil Menghapus Data');
     }
 }
