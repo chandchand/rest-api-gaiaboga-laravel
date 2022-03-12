@@ -15,6 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
+        // $image = Product::getGlobalScope();
         $data=Product::all();
         return response()->json($data);
     }
